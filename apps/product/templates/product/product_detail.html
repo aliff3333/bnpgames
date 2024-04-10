@@ -1,0 +1,428 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {{ object.title }}
+{% endblock %}
+
+{% block more_css %}
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/product-gallery.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe.min.css"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/default-skin/default-skin.min.css"/>
+{% endblock %}
+
+{% block page_name %}product{% endblock %}
+{% block page_hero %}{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="content">
+                    <div class="row">
+                        <div class="col-12 col-lg-5 px-lg-0">
+                            <div class="swiper-container gallery-top">
+                                <!-- Additional required wrapper -->
+                                <ul class="swiper-wrapper">
+                                    <!-- Slides -->
+                                    {% for image in object.images.all %}
+                                        <li id="1" class="swiper-slide">
+                                            <a href="{{ image.image.url }}" itemprop="contentUrl"
+                                               data-size="900x710">
+                                                <img src="{{ image.image.url }}" itemprop="thumbnail"
+                                                     alt=""/>
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                    <!-- /Slides -->
+                                </ul>
+                                <!-- If we need navigation buttons -->
+                                <div title="قبلی" class="swiper-button-prev swiper-button-white"></div>
+                                <div title="بعدی" class="swiper-button-next swiper-button-white"></div>
+                            </div>
+
+                            <!-- Swiper -->
+                            <div class="swiper-container gallery-thumbs">
+                                <div class="swiper-wrapper">
+
+                                    {% for image in object.images.all %}
+                                        <div class="swiper-slide"
+                                             style="background-image:url('{{ image.image.url }}')"></div>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+
+                            <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="pswp__bg"></div>
+                                <div class="pswp__scroll-wrap">
+                                    <div class="pswp__container">
+                                        <div class="pswp__item"></div>
+                                        <div class="pswp__item"></div>
+                                        <div class="pswp__item"></div>
+                                    </div>
+                                    <div class="pswp__ui pswp__ui--hidden">
+                                        <div class="pswp__top-bar">
+                                            <div class="pswp__counter"></div>
+                                            <button class="pswp__button pswp__button--close"
+                                                    title="بستن (Esc)"></button>
+                                            <button class="pswp__button pswp__button--fs"
+                                                    title="تمام صفحه"></button>
+                                            <button class="pswp__button pswp__button--zoom"
+                                                    title="بزرگنمایی"></button>
+                                            <div class="pswp__preloader">
+                                                <div class="pswp__preloader__icn">
+                                                    <div class="pswp__preloader__cut">
+                                                        <div class="pswp__preloader__donut"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button class="pswp__button pswp__button--arrow--left"
+                                                title="قبلی"></button>
+                                        <button class="pswp__button pswp__button--arrow--right"
+                                                title="بعدی"></button>
+                                        <div class="pswp__caption">
+                                            <div class="pswp__caption__center"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-7 mt-5 mt-lg-0 pl-lg-0" id="product-intro">
+                            <a href="{% url 'product:board_game_detail' object.slug %}">
+                                <h1>{{ object.title }}</h1>
+                            </a>
+                            <div class="stars-container">
+                                {{ object.rating }} <i class="fa fa-star"></i>
+                                <a href="#tabs-panel"><span>(بررسی ها)</span></a>
+                            </div>
+                            {% if object.stock > 0 %}
+                                {% if object.discount > 0 %}
+                                    <div class="encode4365gbf265g43d-container py-2">
+                                        <span class="pre-encode4365gbf265g43d price">{{ object.price }} تومان</span>
+                                        <span class="encode4365gbf265g43d price">{{ object.discounted_price }} <span>تومان</span></span>
+                                        <span class="badge badge-danger font-weight-light m-1 py-1 px-2">{{ object.discount }}%</span>
+                                    </div>
+                                {% else %}
+                                    <div class="encode4365gbf265g43d-container py-2">
+                                        <div class="encode4365gbf265g43d price">{{ object.price }} تومان</div>
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                <div class="encode4365gbf265g43d-container py-2">
+                                    <div class="encode4365gbf265g43d">ناموجود</div>
+                                </div>
+                            {% endif %}
+                            <p>{{ object.side_description|safe }}</p>
+                            <hr>
+                        {% if object.stock > 0 %}
+                            <form method="post" action="{% url 'order:cart_add' object.pk %}">
+                                {% csrf_token %}
+                                <div class="variables">
+                                    <div class="row">
+                                        <div class="col-12 col-sm-4 col-lg-3">
+                                            <div class="variable">
+                                                <div class="sub-title pt-2 pb-2">تعداد</div>
+                                                <input type="number" min="1" max="10" class="form-control" value="1"
+                                                       name="quantity">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="cta-container pt-3 pt-md-5">
+                                    <div class="row">
+                                        <div class="col-12">
+
+                                            <button type="submit"
+                                                    class="btn btn-success px-4 px-lg-2 px-xl-4 btn-add-to-basket"><i
+                                                    class="fa fa-shopping-cart"></i> افزودن به سبد خرید
+                                            </button>
+                                            {% endif %}
+                                            <br class="d-sm-none">
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Nav Tabs -->
+                        <div class="col-12">
+                            <div id="product-nav-tabs">
+                                <div class="row pt-3 px-md-3">
+                                    <div class="col-12">
+                                        <div id="tabs-panel">
+                                            <button class="tab-item tablink px-3 selected"
+                                                    onclick="openTab(event,'html-tab')">توضیحات
+                                            </button>
+                                            <button class="tab-item tablink px-3"
+                                                    onclick="openTab(event,'details-tab')">جدول مشخصات
+                                            </button>
+                                            <button class="tab-item tablink px-3"
+                                                    onclick="openTab(event,'comments-tab')"
+                                                    hx-get="{% url 'comment:review_list' object.pk %}"
+                                                    hx-target="#comments-tab"
+                                                    hx-trigger='click'>بررسی ها
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-12 pt-2 px-0 px-lg-0">
+                                            <!-- HTML Tab -->
+                                            <div id="html-tab" class="tabs-container text-justify p-0 p-md-3">
+                                                <p>{{ object.description|safe }}</p>
+                                            </div>
+                                            <!-- /HTML Tab -->
+
+                                            <!-- Details Tab -->
+                                            <div id="details-tab" class="tabs-container px-0 px-md-3 pb-0 pb-md-3"
+                                                 style="display:none">
+                                                <!-- Detail Section -->
+                                                <div class="row mb-2">
+                                                    <div class="col-12 col-md-3 font-weight-bold">
+                                                        <div class="bg-light p-2">تعداد بازیکنان</div>
+                                                    </div>
+                                                    {% if object.player_count_min == object.player_count_max %}
+                                                        <div class="col-12 col-md-9 pr-md-0">
+                                                            <div class="bg-light p-2">
+                                                                {{ object.player_count_max }} نفره
+                                                            </div>
+                                                        </div>
+                                                    {% else %}
+                                                        <div class="col-12 col-md-9 pr-md-0">
+                                                            <div class="bg-light p-2">{{ object.player_count_min }}
+                                                                تا {{ object.player_count_max }} نفر
+                                                            </div>
+                                                        </div>
+                                                    {% endif %}
+
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-12 col-md-3 font-weight-bold">
+                                                        <div class="bg-light p-2">مدت زمان بازی</div>
+                                                    </div>
+                                                    {% if object.time_min == object.time_max %}
+                                                        <div class="col-12 col-md-9 pr-md-0">
+                                                            <div class="bg-light p-2">
+                                                                {{ object.time_min }}دقیقه
+                                                            </div>
+                                                        </div>
+                                                    {% else %}
+                                                        <div class="col-12 col-md-9 pr-md-0">
+                                                            <div class="bg-light p-2">{{ object.time_min }}
+                                                                - {{ object.time_max }} دقیقه
+                                                            </div>
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-12 col-md-3 font-weight-bold">
+                                                        <div class="bg-light p-2">گروه سنی</div>
+                                                    </div>
+                                                    <div class="col-12 col-md-9 pr-md-0">
+                                                        <div class="bg-light p-2">{{ object.age }} سال به بالا</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-12 col-md-3 font-weight-bold">
+                                                        <div class="bg-light p-2">سختی بازی</div>
+                                                    </div>
+                                                    <div class="col-12 col-md-9 pr-md-0">
+                                                        <div class="bg-light p-2">{{ object.complexity_in_word }}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-12 col-md-3 font-weight-bold">
+                                                        <div class="bg-light p-2">ناشر</div>
+                                                    </div>
+                                                    <div class="col-12 col-md-9 pr-md-0">
+                                                        <div class="bg-light p-2">
+                                                            <a href="{% url 'product:publisher_products' object.publisher.slug %}">{{ object.publisher.title }}</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-12 col-md-3 font-weight-bold">
+                                                        <div class="bg-light p-2">طراح(ها)</div>
+                                                    </div>
+                                                    <div class="col-12 col-md-9 pr-md-0">
+                                                        <div class="bg-light p-2">
+                                                            {% for designer in object.designers.all %}
+                                                                <a href="{% url 'product:designer_products' designer.slug %}">{{ designer.title }}</a>
+                                                                {% if not forloop.last %}،{% endif %}
+                                                            {% endfor %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-12 col-md-3 font-weight-bold">
+                                                        <div class="bg-light p-2">دسته بندی(ها)</div>
+                                                    </div>
+                                                    <div class="col-12 col-md-9 pr-md-0">
+                                                        <div class="bg-light p-2">
+                                                            {% for category in object.categories.all %}
+                                                                <a href="{% url 'product:category_products' category.slug %}">{{ category.title }}</a>
+                                                                {% if not forloop.last %}،{% endif %}
+                                                            {% endfor %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-12 col-md-3 font-weight-bold">
+                                                        <div class="bg-light p-2">مکانیزم(ها)</div>
+                                                    </div>
+                                                    <div class="col-12 col-md-9 pr-md-0">
+                                                        <div class="bg-light p-2">
+                                                            {% for mechanism in object.mechanisms.all %}
+                                                                <a href="{% url 'product:mechanism_products' mechanism.slug %}">{{ mechanism.title }}</a>
+                                                                {% if not forloop.last %}،{% endif %}
+                                                            {% endfor %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- /Detail Section -->
+                                            </div>
+                                            <!-- /Details Tab -->
+
+                                            <!-- Comments Tab -->
+                                            <div id="comments-tab" class="tabs-container px-0 px-md-3 pb-0 pb-md-2"
+                                                 style="display:none">
+                                            </div>
+                                            <!-- /Comments Tab -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Nav Tabs -->
+
+                    <!-- Suggested Products -->
+                    <div class="col-12 pt-5" id="suggested-products">
+                        <div class="title py-3 text-center">محصولات مرتبط</div>
+                        <div class="owl-carousel products-carousel">
+                            <!-- Product Item -->
+                            <div class="encode4326654321vfb item">
+                                <a href="product.html">
+                                    <div class="image"
+                                         style="background-image: url('assets/images/products/p303.png')"></div>
+                                </a>
+                                <div class="details p-3">
+                                    <div class="category">
+                                        <a href="products.html">گوشی موبایل</a>
+                                        &nbsp;/&nbsp;
+                                        <a href="products.html">سامسونگ</a>
+                                    </div>
+                                    <a href="product.html"><h2>مودم روتر ADSL2 Plus بی‌ سیم N300 دی-لینک مدل
+                                        DSL-2740U</h2></a>
+                                    <div class="encode4365gbf265g43d">3.000.000 تومان</div>
+                                    <div class="rate">
+                                        <i class="fa fa-star-half-alt"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <span class="encode43bf265g43d">(14 رای دهنده)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Product Item -->
+                            <!-- Product Item -->
+                            <div class="encode4326654321vfb item">
+                                <a href="product.html">
+                                    <div class="image"
+                                         style="background-image: url('assets/images/products/p201.png')"></div>
+                                </a>
+                                <div class="details p-3">
+                                    <div class="category">
+                                        <a href="products.html">گوشی موبایل</a>
+                                        &nbsp;/&nbsp;
+                                        <a href="products.html">سامسونگ</a>
+                                    </div>
+                                    <a href="product.html"><h2>لپ تاپ 14 اینچی ایسوس مدل ZenBook UM433IQ -
+                                        A5023</h2></a>
+                                    <div class="encode4365gbf265g43d">5.000.000 تومان</div>
+                                    <div class="rate">
+                                        <i class="fa fa-star-half-alt"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <span class="encode43bf265g43d">(14 رای دهنده)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Product Item -->
+                            <!-- Product Item -->
+                            <div class="encode4326654321vfb item">
+                                <a href="product.html">
+                                    <div class="image"
+                                         style="background-image: url('assets/images/products/p302.png')"></div>
+                                </a>
+                                <div class="details p-3">
+                                    <div class="category">
+                                        <a href="products.html">گوشی موبایل</a>
+                                        &nbsp;/&nbsp;
+                                        <a href="products.html">سامسونگ</a>
+                                    </div>
+                                    <a href="product.html"><h2>اسپیکر بلوتوثی قابل حمل تی اند جی مدل Tg-113</h2></a>
+                                    <div class="encode4365gbf265g43d">4.000.000 تومان</div>
+                                    <div class="rate">
+                                        <i class="fa fa-star-half-alt"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <span class="encode43bf265g43d">(14 رای دهنده)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Product Item -->
+                            <!-- Product Item -->
+                            <div class="encode4326654321vfb item">
+                                <a href="product.html">
+                                    <div class="image"
+                                         style="background-image: url('assets/images/products/p203.png')"></div>
+                                </a>
+                                <div class="details p-3">
+                                    <div class="category">
+                                        <a href="products.html">گوشی موبایل</a>
+                                        &nbsp;/&nbsp;
+                                        <a href="products.html">سامسونگ</a>
+                                    </div>
+                                    <a href="product.html"><h2>لپ تاپ 15 اینچی ایسوس مدل VivoBook X543MA - A</h2>
+                                    </a>
+                                    <div class="encode4365gbf265g43d">3.000.000 تومان</div>
+                                    <div class="rate">
+                                        <i class="fa fa-star-half-alt"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <span class="encode43bf265g43d">(14 رای دهنده)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Product Item -->
+                        </div>
+                    </div>
+                    <!-- /Suggested Products -->
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block more_scripts %}
+    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'js/nav-tabs.js' %}"></script>
+    <script src="{% static 'js/swiper-bundle.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+    <script src="{% static 'js/product-gallery.js' %}"></script>
+{% endblock %}

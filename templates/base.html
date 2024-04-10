@@ -1,0 +1,53 @@
+{% load static %}
+{% load account %}
+<!doctype html>
+<html lang="fa" dir="rtl">
+
+
+<head>
+    {% include "includes/head.html" %}
+    <title> بخر، بازی کن |
+        {% block title %}
+        {% endblock %}
+    </title>
+    {% block more_css %}{% endblock %}
+</head>
+<body>
+{% include "includes/header.html" %}
+
+<section class="inner-page" id="{% block page_name %}{% endblock %}-page">
+    {% block page_hero %}
+        <div class="container-fluid" id="page-hero">
+            <div class="row">
+                <div class="col-12">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12 px-0">
+                                <h1>{% block page_hero_title %}{% endblock %}</h1>
+                                <p>{% block page_hero_description %}{% endblock %}</p>
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="{% url 'home:home' %}">صفحه نخست</a></li>
+                                        {% block page_hero_mid %}{% endblock %}
+                                        <li class="breadcrumb-item active" aria-current="page">
+                                            {% block page_hero_current %}{% endblock %}</li>
+                                    </ol>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+
+    {% block main %}{% endblock %}
+
+</section>
+{% include "includes/footer.html" %}
+
+{% include "includes/scripts.html" %}
+
+{% block more_scripts %}{% endblock %}
+</body>
+</html>

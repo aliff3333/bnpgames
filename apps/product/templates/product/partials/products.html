@@ -1,0 +1,145 @@
+{% if products %}
+    <!-- Filters -->
+    <div id="order-filters">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-sm-10 my-1">
+                    <span class="d-block d-sm-inline-block">مرتب سازی بر اساس:</span>
+                    <span class="order-filter d-block d-sm-inline-block {% if ordering == 'newest' or ordering is None %}active{% endif %}"
+                          hx-get="{{ request.path }}?ordering=newest{{ query_string }}"
+                          hx-trigger="click"
+                          hx-target="#product-list">جدیدترین</span>
+                    <span class="order-filter d-block d-sm-inline-block {% if ordering == 'most-expensive' %}active{% endif %}"
+                          hx-get="{{ request.path }}?ordering=most-expensive{{ query_string }}"
+                          hx-trigger="click once"
+                          hx-target="#product-list">گران‌ترین</span>
+                    <span class="order-filter d-block d-sm-inline-block {% if ordering == 'cheapest' %}active{% endif %}"
+                          hx-get="{{ request.path }}?ordering=cheapest{{ query_string }}"
+                          hx-trigger="click once"
+                          hx-target="#product-list">ارزان‌ترین</span>
+                </div>
+                <div class="col-12 col-sm-2 pt-1 text-end">
+                    <span>{{ product_count }} کالا</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Filters -->
+    <div class="mt-2" id="pager">
+        <div class="container">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 gx-md-4">
+                <!-- Products -->
+                {% for product in products %}
+                    <div class="col">
+                        <!-- Product Box -->
+                        <div class="encode4326654321vfb">
+                            <a href="{% url 'product:board_game_detail' product.slug %}">
+                                <div class="image"
+                                     style="background-image: url('{{ product.featured_image.image.url }}')">
+                                    {% if product.discount > 0 %}
+                                        <span class="badge on-sale-badge">{{ product.discount }}% تخفیف</span>
+                                    {% endif %}
+                                </div>
+                            </a>
+                            <div class="details p-3">
+                                <div class="category">
+                                    {% for category in product.categories.all %}
+                                        <a href="{% url 'product:category_products' category.slug %}">{{ category.title }}</a>
+                                    {% endfor %}
+                                </div>
+                                <a href="{% url 'product:board_game_detail' product.slug %}">
+                                    <h2>{{ product.title }}</h2>
+                                </a>
+                                {% if product.in_stock %}
+                                    {% if product.discount > 0 %}
+                                        <div>
+                                            <span class="discounted price">{{ product.price }} تومان</span>
+                                            <br class="d-sm-none">
+                                            <span class="encode4365gbf265g43d price">{{ product.discounted_price }} تومان</span>
+                                        </div>
+                                    {% else %}
+                                        <div class="encode4365gbf265g43d-container py-2">
+                                            <div class="encode4365gbf265g43d price">{{ product.price }} تومان</div>
+                                        </div>
+                                    {% endif %}
+                                {% else %}
+                                    <div class="encode4365gbf265g43d-container py-2">
+                                        <div class="encode4365gbf265g43d">ناموجود</div>
+                                    </div>
+                                {% endif %}
+
+                                <div class="rate">{{ product.rating }} <i class="fa fa-star"></i>
+                                    {% if product.reviews == 0 %}
+                                        <span class="encode43bf265g43d">(بدون بررسی)</span>
+                                    {% else %}
+                                        <span class="encode43bf265g43d">({{ product.reviews }} بررسی)</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Product Box -->
+                    </div>
+                {% endfor %}
+                <!-- /Products -->
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div id="pagination-bg">
+                <ul class="pagination justify-content-center pagination-sm">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item" id="previous-page">
+                            <a class="page-link"
+                               hx-get="{{ request.path }}?page=
+                                   {{ page_obj.previous_page_number }}{% if ordering %}&ordering={{ ordering }}{% elif ordering is None %}&ordering=newest{% endif %}{% if query_string %}{{ query_string }}{% endif %}"
+                               hx-trigger="click"
+                               hx-target="#product-list"
+                               href="" aria-label="First">
+                                <svg class="svg-inline--fa fa-angle-double-right fa-w-14" aria-hidden="true"
+                                     focusable="false" data-prefix="fas" data-icon="angle-double-right" role="img"
+                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="">
+                                    <path fill="currentColor"
+                                          d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34zm192-34l-136-136c-9.4-9.4-24.6-9.4-33.9 0l-22.6 22.6c-9.4 9.4-9.4 24.6 0 33.9l96.4 96.4-96.4 96.4c-9.4 9.4-9.4 24.6 0 33.9l22.6 22.6c9.4 9.4 24.6 9.4 33.9 0l136-136c9.4-9.2 9.4-24.4 0-33.8z"></path>
+                                </svg>
+                                <!-- <i class="fas fa-angle-double-right"></i> Font Awesome fontawesome.com -->
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <li class="page-item current-page active"><a class="page-link">{{ num }}</a></li>
+                        {% else %}
+                            <li class="page-item current-page">
+                                <a class="page-link"
+                                   hx-get="{{ request.path }}?page={{ num }}{% if ordering %}&ordering={{ ordering }}{% elif ordering is None %}&ordering=newest{% endif %}{% if query_string %}{{ query_string }}{% endif %}"
+                                   hx-trigger="click"
+                                   hx-target="#product-list"
+                                   href="">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                        <li class="page-item" id="next-page">
+                            <a class="page-link"
+                               hx-get="{{ request.path }}?page={{ page_obj.next_page_number }}{% if ordering %}&ordering={{ ordering }}{% elif ordering is None %}&ordering=newest{% endif %}{% if query_string %}{{ query_string }}{% endif %}"
+                               hx-trigger="click"
+                               hx-target="#product-list"
+                               href="" aria-label="Last">
+                                <svg class="svg-inline--fa fa-angle-double-left fa-w-14" aria-hidden="true"
+                                     focusable="false" data-prefix="fas" data-icon="angle-double-left" role="img"
+                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="">
+                                    <path fill="currentColor"
+                                          d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path>
+                                </svg>
+                                <!-- <i class="fas fa-angle-double-left"></i> Font Awesome fontawesome.com -->
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <h2 class="m-lg-5">محصولی وجود ندارد</h2>
+{% endif %}

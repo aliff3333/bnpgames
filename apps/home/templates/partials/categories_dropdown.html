@@ -1,0 +1,56 @@
+{% load static %}
+<ul class="droopmenu-grid droopmenu-grid-9">
+    <li class="droopmenu-tabs droopmenu-tabs-vertical">
+        <div class="droopmenu-tabsection droopmenu-tab-active"
+             id="droopmenutab10">
+            <a class="droopmenu-tabheader" href="#">دسته بندی ها</a>
+            <div class="droopmenu-tabcontent">
+                <div class="droopmenu-row">
+                    <ul class="droopmenu-col droopmenu-col4">
+                        {% for cat in categories %}
+                            <li><a href="{% url 'product:category_products' cat.slug %}">{{ cat.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="droopmenu-tabsection" id="droopmenutab11">
+            <a class="droopmenu-tabheader" href="#">مکانیزم ها</a>
+            <div class="droopmenu-tabcontent">
+                <div class="droopmenu-row">
+                    <ul class="droopmenu-col droopmenu-col4">
+                        {% for mec in mechanisms %}
+                            <li><a href="{% url 'product:mechanism_products' mec.slug %}">{{ mec.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    <div class="droopmenu-tabsection" id="droopmenutab11">
+            <a class="droopmenu-tabheader" href="#">طراحان</a>
+            <div class="droopmenu-tabcontent">
+                <div class="droopmenu-row">
+                    <ul class="droopmenu-col droopmenu-col4">
+                        {% for des in designers %}
+                            <li><a href="{% url 'product:designer_products' des.slug %}">{{ des.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    <div class="droopmenu-tabsection" id="droopmenutab11">
+            <a class="droopmenu-tabheader" href="#">ناشران</a>
+            <div class="droopmenu-tabcontent">
+                <div class="droopmenu-row">
+                    <ul class="droopmenu-col droopmenu-col4">
+                        {% for pub in publishers %}
+                            <li><a href="{% url 'product:publisher_products' pub.slug %}">{{ pub.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </li>
+</ul>

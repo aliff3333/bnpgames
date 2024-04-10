@@ -1,0 +1,112 @@
+{% load static %}
+{% load account %}
+{% load render_partial %}
+<!-- Header -->
+<section id="header">
+    <!-- Top NavBar -->
+    <div id="encode4325436">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 d-none d-md-block"></div>
+            </div>
+        </div>
+    </div>
+    <!-- /Top NavBar -->
+    <!-- Search NavBar -->
+    <div id="encode43254bvfb">
+        <div class="container pt-1">
+            <div class="row py-3 align-content-center">
+                <div class="col-12 col-md-3 col-xl-2 text-center text-md-start pb-2" id="encode4326523bvfb">
+                    <a href="{% url 'home:home' %}">
+                        <img src="{% static 'images/logo.png' %}" alt=""> روبیک مارکت
+                    </a>
+                </div>
+                <div class="col-12 col-md-5 col-xl-6">
+                    <div id="search-bar">
+                        <form action="{% url 'product:search_product' %}">
+                        <i class="fa fa-search"></i>
+                        <input type="text" placeholder="جستجو کنید..." name="q">
+                        </form>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="row">
+                        {% if user.is_authenticated %}
+                            <div class="col-12 col-md-7 col-lg-6 text-center" id="btn-login-register">
+                                <a href="{% url "accounts:user_profile" %}">{% user_display user %}</a>
+                            </div>
+                        {% else %}
+                            <div class="col-12 col-md-7 col-lg-6 text-center" id="btn-login-register">
+                                <a href="{% url 'account_login' %}">ورود</a> /
+                                <a href="{% url 'account_signup' %}">عضویت</a>
+                            </div>
+                        {% endif %}
+                        <div class="col-12 col-md-5 col-lg-6">
+                            <a href="{% url 'order:cart_detail' %}">
+                                <div class="btn btn-warning w-100"><i class="fa fa-shopping-cart"></i>&nbsp;<span
+                                        class="d-md-none d-lg-inline-block">سبد خرید</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Search NavBar -->
+    <!-- Main NavBar -->
+    <div id="main-nav">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="droopmenu-navbar dmarrow-down droopmenu-horizontal dmpos-top dmfade">
+                        <div class="droopmenu-inner">
+                            <div class="droopmenu-header">
+                                <a href="#" class="droopmenu-toggle"><i class="dm-burg"></i></a>
+                                <span class="d-md-none">منوی فروشگاه</span>
+                            </div>
+                            <!-- Header Mega Menu-->
+                            <div class="droopmenu-nav">
+                                <div class="droopmenu-nav-wrap">
+                                    <div class="droopmenu-navi">
+                                        <ul class="droopmenu">
+                                            <li class="droopmenu-parent" aria-haspopup="true">
+                                                <a href="#" aria-expanded="false"><i class="fa fa-bars"></i>&nbsp;&nbsp;گروه
+                                                    های محصولات<em class="droopmenu-topanim"></em></a>
+                                                <div class="dm-arrow"></div>
+                                                {% render_partial 'home:product_groups' %}
+                                            </li>
+                                            <li><a href="{% url 'home:home' %}">صفحه نخست</a></li>
+                                            <li><a href="{% url 'product:product_list' %}">تمام محصولات<em
+                                                    class="droopmenu-topanim"></em></a>
+                                            </li>
+                                            <li><a href="{% url 'home:about_us' %}">درباره ما</a></li>
+                                            {% if user.is_authenticated %}
+                                                <li class="droopmenu-parent" aria-haspopup="true">
+                                                    <a href="profile/personal-info.html" aria-expanded="false">پروفایل
+                                                        کاربری<em class="droopmenu-topanim"></em></a>
+                                                    <div class="dm-arrow"></div>
+                                                    <ul style="">
+                                                        <li><a href="{% url "accounts:user_profile" %}">مشخصات
+                                                            کاربری</a></li>
+                                                        <li><a href="profile/factors.html">سفارشات</a></li>
+                                                        <li><a href="{% url "accounts:add_list_address" %}">آدرس ها</a>
+                                                        </li>
+                                                        <li><a href="profile/favorites.html">علاقه مندی ها</a></li>
+                                                    </ul>
+                                                </li>
+                                            {% endif %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Header Menu Menu -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Main NavBar -->
+</section>
+<!-- /Header -->

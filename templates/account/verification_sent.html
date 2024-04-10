@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    ایمیل تایید ارسال شد
+{% endblock %}
+
+{% block page_name %}contact{% endblock %}
+{% block page_hero_title %}تایید ایمیل{% endblock %}
+{% block page_hero_description %}ایمیل تایید ارسال شد.{% endblock %}
+{% block page_hero_current %}بازیابی رمز عبور{% endblock %}
+
+{% block main %}
+    <div class="container py-2 py-md-5">
+        <div class="row">
+            <div class="col-12 col-sm-10 offset-sm-1">
+                <div class="content">
+                    <div class="row">
+                        <div class="col-12 col-lg-5 text-center">
+                            <img src="{% static 'images/reset-password.png' %}" alt="">
+                        </div>
+                        <div class="col-12 col-lg-7 pt-5 pt-md-0 align-self-center">
+                            <div class="title">تایید ایمیل</div>
+                            <p>ایمیلی جهت تایید آدرس ایمیلی که وارد کردید ارسال شد.<br>
+                                در صورتی که ایمیلی دریافت نکرده اید، ابتدا پوشه اسپم را بررسی کنید و در صورت عدم وجود،
+                                به پشتیبانی پیام دهید.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

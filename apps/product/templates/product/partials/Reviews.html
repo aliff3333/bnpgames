@@ -1,0 +1,90 @@
+<div class="row">
+    <div class="col-12 text-justify" id="comments">
+    {% if reviews %}
+        <div class="comments-container">
+            <div class="container px-0">
+                <div class="row">
+                    <div class="col-12 pt-2">
+                        <!-- Show Comments -->
+                            {% for review in reviews %}
+                                <div class="comment p-3 my-2">
+                                    <div class="sender-details">
+                                        <div class="row">
+                                            <div class="col-9 col-sm-10 col-md-11 pr-0 pr-md-2 pr-xl-0 pt-0 pt-lg-1">
+                                                <div class="name">{{ review.user.full_name }}</div>
+                                                <div class="date">ثبت شده در {{ review.created_at.date }}</div>
+                                            </div>
+                                            <div class="col-3 col-sm-2 col-md-1 pl-md-0 pl-lg-2 pl-xl-3">
+                                                <div class="stars-container">
+                                                    {{ review.rating }} <i class="fa fa-star"
+                                                                           style="color: #fcb941"></i>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <p>{{ review.body }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        <!-- /Show Comments -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    {% if request.user.is_authenticated %}
+        <!-- Send Comment Form -->
+        <div class="comments-container">
+            <div class="row pt-4">
+                {% if messages %}
+                            <ul class="messages">
+                                {% for message in messages %}
+                                    <li{% if message.tags %} class="alert alert-{{ message.tags }}  list-unstyled"{% endif %}>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                <div class="col-12"><h2>ثبت بررسی</h2></div>
+            </div>
+            <div class="row">
+                <div class="col-12 py-3">
+                    <form method="post"
+                          hx-post="{% url 'comment:review_list' product_id %}"
+                          hx-target="#comments-tab">
+                        {% csrf_token %}
+                        <div id="send-comment-form">
+                            <p>بررسی خود را برای این محصول ثبت کنید.</p>
+                            <div class="row">
+                                <div class="col-1">
+                                    <div class="form-group my-1">
+                                        {{ form.rating.label_tag }}
+                                        {{ form.rating }}
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group my-1">
+                                        {{ form.body }}
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group my-1">
+                                        <input type="submit" value="ارسال دیدگاه" class="btn btn-success px-5">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- /Send Comment Form -->
+        {% else %}
+        <div class="row pt-4">
+                <div class="col-12">
+                    <p>برای ثبت بررسی لطفا وارد حساب خود شوید.</p><a href="/login">(ورود به حساب)</a>
+
+                </div>
+            </div>
+    {% endif %}
+    </div>
+</div>

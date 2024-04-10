@@ -1,0 +1,352 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}صفحه اصلی{% endblock %}
+
+{% block page_name %}home{% endblock %}
+
+{% block page_hero %}{% endblock %}
+
+
+{% block main %}
+    <!-- Slider Section -->
+    <section id="slider" class="mt-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-9" data-aos="fade-zoom-in" data-aos-duration="700">
+                    <div id="carouselExampleCaptions" class="carousel slide carousel-fade" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            {% for slide in sliders %}
+                                <button type="button" data-bs-target="#carouselExampleCaptions"
+                                        data-bs-slide-to="{{ forloop.counter0 }}"
+                                        {% if forloop.counter == 1 %}class="active"{% endif %} aria-current="true"
+                                        aria-label="Slide {{ forloop.counter }}"></button>
+                            {% endfor %}
+                        </div>
+                        <div class="carousel-inner">
+                            {% for slide in sliders %}
+                                <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
+                                    <a href="{% if slide.url %}{{ slide.url }}{% else %}{% endif %}">
+                                        <img src="{{ slide.image.url }}" class="d-block" alt="...">
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+                                data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+                                data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-12 col-md-3 mt-2 mt-sm-1 text-center text-sm-start" id="slider-side-banners">
+                    <div class="row row-cols-1 row-cols-sm-3 row-cols-md-1 h-100 gy-2 g-sm-1 g-md-0">
+                        {% if side_banners %}
+                        <div class="col align-self-start" data-aos="fade-top" data-aos-duration="1000">
+                            <a href="{{ side_banners.0.url }}">
+                                <img src="{{ side_banners.0.image.url }}" alt="" width="100%">
+                            </a>
+                        </div>
+                        <div class="col align-self-center mt-2" data-aos="fade-top" data-aos-duration="1100">
+                            <a href="{{ side_banners.1.url }}">
+                                <img src="{{ side_banners.1.image.url }}" alt="" width="100%">
+                            </a>
+                        </div>
+                        <div class="col align-self-end mt-2" data-aos="fade-top" data-aos-duration="1200">
+                            <a href="{{ side_banners.2.url }}">
+                                <img src="{{ side_banners.2.image.url }}" alt="" width="100%">
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /Slider Section -->
+
+    <!-- Featured Products Section -->
+    <section id="featured-products" class="my-5">
+        <div class="container">
+            <!-- Tabs -->
+            <div class="row pb-2 pb-sm-4">
+                <div class="col-12 text-center">
+                    <div class="btn-group" role="group" id="featured-products-nav">
+                        <button type="button" class="btn active featured-categories" data-val="featured">محصولات منتخب
+                        </button>
+                        <button type="button" class="btn featured-categories" data-val="on-sale">تخفیف خورده</button>
+                        <button type="button" class="btn featured-categories" data-val="most-visited">پربازدیدترین
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- /Tabs -->
+
+            <!-- Products -->
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-md-4 featured-product featured scroll-container" data-aos="fade-up"
+                 data-aos-duration="1000">
+                {% for product in featured_products %}
+                    <div class="col">
+                    <!-- Product Box -->
+                    <div class="encode4326654321vfb">
+                        <a href="{% url 'product:board_game_detail' product.slug %}">
+                            <div class="image"
+                                 style="background-image: url('{{ product.featured_image.image.url }}')">
+                                {% if product.discount > 0 %}
+                                    <span class="badge on-sale-badge">{{ product.discount }}% تخفیف</span>
+                                {% endif %}
+                            </div>
+                        </a>
+                        <div class="details p-3">
+                            <div class="category">
+                                {% for category in product.categories.all %}
+                                    <a href="{% url 'product:category_products' category.slug %}">{{ category.title }}</a>
+                                {% endfor %}
+                            </div>
+                            <a href="{% url 'product:board_game_detail' product.slug %}"><h2>{{ product.title }}</h2>
+                            </a>
+                            {% if product.in_stock %}
+                                    {% if product.discount > 0 %}
+                                        <div>
+                                            <span class="discounted price">{{ product.price }} تومان</span>
+                                            <br class="d-sm-none">
+                                            <span class="encode4365gbf265g43d price">{{ product.discounted_price }} تومان</span>
+                                        </div>
+                                    {% else %}
+                                        <div class="encode4365gbf265g43d-container py-2">
+                                            <div class="encode4365gbf265g43d price">{{ product.price }} تومان</div>
+                                        </div>
+                                    {% endif %}
+                                {% else %}
+                                    <div class="encode4365gbf265g43d-container py-2">
+                                        <div class="encode4365gbf265g43d">ناموجود</div>
+                                    </div>
+                                {% endif %}
+
+                                <div class="rate">{{ product.rating }} <i class="fa fa-star"></i>
+                                    {% if product.reviews == 0 %}
+                                        <span class="encode43bf265g43d">(بدون بررسی)</span>
+                                    {% else %}
+                                        <span class="encode43bf265g43d">({{ product.reviews }} بررسی)</span>
+                                    {% endif %}
+                                </div>
+                        </div>
+                    </div>
+                    <!-- /Product Box -->
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-md-4 featured-product on-sale scroll-container">
+                {% for product in on_sale_products %}
+                    <div class="col">
+                    <!-- Product Box -->
+                    <div class="encode4326654321vfb">
+                        <a href="{% url 'product:board_game_detail' product.slug %}">
+                            <div class="image"
+                                 style="background-image: url('{{ product.featured_image.image.url }}')">
+                                {% if product.discount > 0 %}
+                                    <span class="badge on-sale-badge">{{ product.discount }}% تخفیف</span>
+                                {% endif %}
+                            </div>
+                        </a>
+                        <div class="details p-3">
+                            <div class="category">
+                                {% for category in product.categories.all %}
+                                    <a href="{% url 'product:category_products' category.slug %}">{{ category.title }}</a>
+                                {% endfor %}
+                            </div>
+                            <a href="{% url 'product:board_game_detail' product.slug %}"><h2>{{ product.title }}</h2>
+                            </a>
+                            {% if product.in_stock %}
+                                    {% if product.discount > 0 %}
+                                        <div>
+                                            <span class="discounted price">{{ product.price }} تومان</span>
+                                            <br class="d-sm-none">
+                                            <span class="encode4365gbf265g43d price">{{ product.discounted_price }} تومان</span>
+                                        </div>
+                                    {% else %}
+                                        <div class="encode4365gbf265g43d-container py-2">
+                                            <div class="encode4365gbf265g43d price">{{ product.price }} تومان</div>
+                                        </div>
+                                    {% endif %}
+                                {% else %}
+                                    <div class="encode4365gbf265g43d-container py-2">
+                                        <div class="encode4365gbf265g43d">ناموجود</div>
+                                    </div>
+                                {% endif %}
+
+                                <div class="rate">{{ product.rating }} <i class="fa fa-star"></i>
+                                    {% if product.reviews == 0 %}
+                                        <span class="encode43bf265g43d">(بدون بررسی)</span>
+                                    {% else %}
+                                        <span class="encode43bf265g43d">({{ product.reviews }} بررسی)</span>
+                                    {% endif %}
+                                </div>
+                        </div>
+                    </div>
+                    <!-- /Product Box -->
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-md-4 featured-product most-visited scroll-container">
+                 {% for product in most_visited %}
+                    <div class="col">
+                    <!-- Product Box -->
+                    <div class="encode4326654321vfb">
+                        <a href="{% url 'product:board_game_detail' product.slug %}">
+                            <div class="image"
+                                 style="background-image: url('{{ product.featured_image.image.url }}')">
+                                {% if product.discount > 0 %}
+                                    <span class="badge on-sale-badge">{{ product.discount }}% تخفیف</span>
+                                {% endif %}
+                            </div>
+                        </a>
+                        <div class="details p-3">
+                            <div class="category">
+                                {% for category in product.categories.all %}
+                                    <a href="{% url 'product:category_products' category.slug %}">{{ category.title }}</a>
+                                {% endfor %}
+                            </div>
+                            <a href="{% url 'product:board_game_detail' product.slug %}"><h2>{{ product.title }}</h2>
+                            </a>
+                            {% if product.in_stock %}
+                                    {% if product.discount > 0 %}
+                                        <div>
+                                            <span class="discounted price">{{ product.price }} تومان</span>
+                                            <br class="d-sm-none">
+                                            <span class="encode4365gbf265g43d price">{{ product.discounted_price }} تومان</span>
+                                        </div>
+                                    {% else %}
+                                        <div class="encode4365gbf265g43d-container py-2">
+                                            <div class="encode4365gbf265g43d price">{{ product.price }} تومان</div>
+                                        </div>
+                                    {% endif %}
+                                {% else %}
+                                    <div class="encode4365gbf265g43d-container py-2">
+                                        <div class="encode4365gbf265g43d">ناموجود</div>
+                                    </div>
+                                {% endif %}
+
+                                <div class="rate">{{ product.rating }} <i class="fa fa-star"></i>
+                                    {% if product.reviews == 0 %}
+                                        <span class="encode43bf265g43d">(بدون بررسی)</span>
+                                    {% else %}
+                                        <span class="encode43bf265g43d">({{ product.reviews }} بررسی)</span>
+                                    {% endif %}
+                                </div>
+                        </div>
+                    </div>
+                    <!-- /Product Box -->
+                </div>
+                {% endfor %}
+            </div>
+            <!-- /Products -->
+        </div>
+    </section>
+    <!-- /Featured Products Section -->
+
+    <!-- Benefits Section -->
+    <section id="benefits" class="pt-4">
+        <div class="container">
+            <div class="row pt-2">
+                <div class="col">
+                    <hr>
+                </div>
+            </div>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 gy-3 text-center">
+                <div class="col" data-aos="fade-zoom-in" data-aos-duration="800">
+                    <img src="assets/images/benefits/benefit1.png" alt="">
+                    <span>پشتیبانی 24 ساعته</span>
+                </div>
+                <div class="col" data-aos="fade-zoom-in" data-aos-duration="1000">
+                    <img src="assets/images/benefits/benefit2.png" alt="">
+                    <span>ضمانت اصالت کالا</span>
+                </div>
+                <div class="col" data-aos="fade-zoom-in" data-aos-duration="1200">
+                    <img src="assets/images/benefits/benefit3.png" alt="">
+                    <span>ضمانت بازگشت وجه</span>
+                </div>
+                <div class="col" data-aos="fade-zoom-in" data-aos-duration="1400">
+                    <img src="assets/images/benefits/benefit4.png" alt="">
+                    <span>ارسال سریع با بهترین بسته بندی</span>
+                </div>
+            </div>
+            <div class="row pt-2">
+                <div class="col">
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /Benefits Section -->
+
+    <!-- Most Sales Products -->
+    <section id="encode436bvf2vrf" class="pt-4">
+        <h1 class="section-title">پرفروش ترین محصولات</h1>
+        <div class="container pt-4">
+            <!-- Products -->
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-md-4 most-sales-product scroll-container" data-aos="fade-up"
+                 data-aos-duration="1000">
+                {% for product in most_sold %}
+                    <div class="col">
+                    <!-- Product Box -->
+                    <div class="encode4326654321vfb">
+                        <a href="{% url 'product:board_game_detail' product.slug %}">
+                            <div class="image"
+                                 style="background-image: url('{{ product.featured_image.image.url }}')">
+                                {% if product.discount > 0 %}
+                                    <span class="badge on-sale-badge">{{ product.discount }}% تخفیف</span>
+                                {% endif %}
+                            </div>
+                        </a>
+                        <div class="details p-3">
+                            <div class="category">
+                                {% for category in product.categories.all %}
+                                    <a href="{% url 'product:category_products' category.slug %}">{{ category.title }}</a>
+                                {% endfor %}
+                            </div>
+                            <a href="{% url 'product:board_game_detail' product.slug %}"><h2>{{ product.title }}</h2>
+                            </a>
+                            {% if product.in_stock %}
+                                    {% if product.discount > 0 %}
+                                        <div>
+                                            <span class="discounted price">{{ product.price }} تومان</span>
+                                            <br class="d-sm-none">
+                                            <span class="encode4365gbf265g43d price">{{ product.discounted_price }} تومان</span>
+                                        </div>
+                                    {% else %}
+                                        <div class="encode4365gbf265g43d-container py-2">
+                                            <div class="encode4365gbf265g43d price">{{ product.price }} تومان</div>
+                                        </div>
+                                    {% endif %}
+                                {% else %}
+                                    <div class="encode4365gbf265g43d-container py-2">
+                                        <div class="encode4365gbf265g43d">ناموجود</div>
+                                    </div>
+                                {% endif %}
+
+                                <div class="rate">{{ product.rating }} <i class="fa fa-star"></i>
+                                    {% if product.reviews == 0 %}
+                                        <span class="encode43bf265g43d">(بدون بررسی)</span>
+                                    {% else %}
+                                        <span class="encode43bf265g43d">({{ product.reviews }} بررسی)</span>
+                                    {% endif %}
+                                </div>
+                        </div>
+                    </div>
+                    <!-- /Product Box -->
+                </div>
+                {% endfor %}
+            </div>
+            <!-- /Products -->
+        </div>
+    </section>
+    <!-- /Most Sales Products -->
+{% endblock %}

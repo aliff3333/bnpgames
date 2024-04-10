@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_hero_title }}{% endblock %}
+
+{% block page_name %}products{% endblock %}
+
+{% block page_hero_title %}{{ page_hero_title }}{% endblock %}
+{% block page_hero_mid %}
+    {% if page_hero_mid %}
+        <li class="breadcrumb-item" aria-current="page">{{ page_hero_mid }}</li>
+    {% endif %}
+{% endblock %}
+{% block page_hero_description %}{{ page_hero_description|safe }}{% endblock %}
+{% block page_hero_current %}{{ page_hero_current }}{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="content">
+                    <div class="row">
+                        <div class="col-12 col-lg-3 px-3 px-lg-0">
+                            <!-- Side Panel -->
+                            {% include 'product/partials/side_panel.html' %}
+                            <!-- /Side Panel -->
+                        </div>
+                        <div id="product-list" class="col-12 col-lg-9 px-0 pl-lg-0 pr-lg-2 mt-2 mt-lg-0">
+                            <!-- Products List -->
+                            {% if products %}
+                                {% include 'product/partials/products.html' %}
+                            {% else %}
+                                <h2 class="m-lg-5">محصولی وجود ندارد</h2>
+                            {% endif %}
+                            <!-- /Products List -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

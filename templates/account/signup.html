@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}ثبت نام{% endblock %}
+
+{% block page_name %}contact{% endblock %}
+
+{% block page_hero_title %}عضویت در سایت{% endblock %}
+
+{% block page_hero_current %}عضویت{% endblock %}
+
+{% block main %}
+        <div class="container py-2 py-md-5">
+            <div class="row">
+                <div class="col-12 col-sm-10 offset-sm-1">
+                    <div class="content">
+                        <div class="row">
+                            <div class="col-12 col-lg-5 text-center">
+                                <img src="{% static 'images/login.png' %}" alt="">
+                            </div>
+                            <div class="col-12 col-lg-7 pt-5 pt-md-0 align-self-center">
+                                <div class="title">عضویت</div>
+                                <p>با ساخت حساب کاربری از همه امکانات سایت بهره مند شوید.</p>
+                                <form method="post" action="">
+                                {% csrf_token %}
+                                    {% for input in form %}
+                                        <div class="form-group">
+                                        {{ input.as_field_group }}
+                                    </div>
+                                    {% endfor %}
+                                    <div class="form-group">
+                                        <input type="submit" value="عضویت"
+                                               class="btn btn-success">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

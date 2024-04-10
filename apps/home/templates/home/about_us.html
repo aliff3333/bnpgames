@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}سبد خرید{% endblock %}
+
+{% block page_name %}cart{% endblock %}
+
+{% block page_hero_title %}درباره ما{% endblock %}
+{% block page_hero_description %}فروشگاه روبیک مارکت را بهتر بشناسید.{% endblock %}
+{% block page_hero_current %}درباره ما{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="content">
+                    <div class="row">
+                        <div class="col-12">
+                            {{ about_us.content|safe }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
