@@ -11,12 +11,14 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         base_queryset = BoardGame.active_objects.filter(stock__gt=0).prefetch_related(
-            Prefetch('images', queryset=ProductImage.objects.filter(featured=True)), 'categories').only('title',
-                                                                                                        'price',
-                                                                                                        'discount',
-                                                                                                        'rating',
-                                                                                                        'slug',
-                                                                                                        'images').annotate(
+            Prefetch(
+                'images', queryset=ProductImage.objects.filter(featured=True)),
+            'categories').only('title',
+                               'price',
+                               'discount',
+                               'rating',
+                               'slug',
+                               'images').annotate(
             in_stock=Case(
                 When(stock__gt=0, then=Value(1)),
                 default=Value(0),
