@@ -1,4 +1,4 @@
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Case, Value, When, IntegerField
 from django.shortcuts import render
 from django.views.generic import TemplateView
 
@@ -16,7 +16,13 @@ class HomeView(TemplateView):
                                                                                                         'discount',
                                                                                                         'rating',
                                                                                                         'slug',
-                                                                                                        'images')
+                                                                                                        'images').annotate(
+            in_stock=Case(
+                When(stock__gt=0, then=Value(1)),
+                default=Value(0),
+                output_field=IntegerField()
+            )
+        )
         context = {
             'sliders': HomeSlide.objects.all(),
             'side_banners': HomeBanner.objects.all(),
