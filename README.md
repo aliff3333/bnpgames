@@ -1,4 +1,3 @@
 Bnpgames shop
-وبسایت فروشگاه بردگیم ساخته شده توسط فریمورک جنگو
 
-علی صیادی
+A board game shop created by Ali Sayyadi with Django framework.
